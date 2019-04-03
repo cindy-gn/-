@@ -1,6 +1,6 @@
 <template>
-  <el-row class="row1" type='flex' justify='center' align='middle'>
-    <el-col class="col1" :span='8'>
+  <el-row class="row1" type="flex" justify="center" align="middle">
+    <el-col class="col1" :span="8">
       <el-form class="form" :model="ruleForm" :rules="rules" ref="ruleForm">
         <el-form-item label="用户名" prop="username">
           <el-input v-model="ruleForm.username"></el-input>
@@ -41,38 +41,60 @@ export default {
   },
   methods: {
     startLogin() {
-      this.$refs.ruleForm.validate(valid => {
+      this.$refs.ruleForm.validate(async valid => {
         console.log(valid); // 如果返回true就是登录成功
         // 如果检验不成功就返回
         if (!valid) {
           return;
         }
         // 如果校验成功 就开始登录
-        axios
-          .post("http://localhost:8888/api/private/v1/login", this.ruleForm)
-          .then(res => {
-            console.log(res);
-            // 登录的时候把token存储到本地
-            localStorage.setItem('token',res.data.data.token)
-            if (res.data.meta.status === 200) {
-              // 1.提示登录成功
-              this.$message({
-                message: res.data.meta.msg,
-                type: "success",
-                duration: 800
-              });
-              // 跳转到 home页面
-              this.$router.push("/home");
-            } else {
-              this.$message({   
-                message: res.data.meta.msg,
-                type: "error",
-                duration: 800
-              });
-            }
+        let URL = "http://localhost:8888/api/private/v1/login";
+        let res = await axios.post(URL, this.ruleForm);
+        // console.log(res);
+        // 登录的时候把token存储到本地
+        if (res.data.meta.status === 200) {
+          localStorage.setItem("token", res.data.data.token);
+          // 1.提示登录成功
+          this.$message({
+            message: res.data.meta.msg,
+            type: "success",
+            duration: 800
           });
-        // console.log('登录成功')
+          // 跳转到 home页面
+          this.$router.push("/home");
+        } else {
+          this.$message({
+            message: res.data.meta.msg,
+            type: "error",
+            duration: 800
+          });
+        }
       });
+      // axios
+      //   .post("http://localhost:8888/api/private/v1/login", this.ruleForm)
+      //   .then(res => {
+      //   console.log(res);
+      //   // 登录的时候把token存储到本地
+      //   if (res.data.meta.status === 200) {
+      //   localStorage.setItem('token',res.data.data.token)
+      //     // 1.提示登录成功
+      //     this.$message({
+      //       message: res.data.meta.msg,
+      //       type: "success",
+      //       duration: 800
+      //     });
+      //     // 跳转到 home页面
+      //     this.$router.push("/home");
+      //   } else {
+      //     this.$message({
+      //       message: res.data.meta.msg,
+      //       type: "error",
+      //       duration: 800
+      //     });
+      //   }
+      // });
+      // console.log('登录成功')
+      // });
     },
     resetForm() {
       this.$refs.ruleForm.resetFields();
@@ -82,15 +104,13 @@ export default {
 </script>
 
 <style scoped lang='less'>
-
-.row1{
+.row1 {
   height: 100%;
   background: #2d434c;
 }
-.col1{
+.col1 {
   background: #fff;
   border-radius: 20px;
   padding: 25px 40px;
 }
-
 </style>

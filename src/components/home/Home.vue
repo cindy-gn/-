@@ -62,7 +62,42 @@
 <script>
 export default {
   methods: {
-    logout () {
+    async logout () {
+      try {
+        await this.$confirm('此操作将退出登录, 是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        })
+        console.log('成功')
+        // 1.删除token
+        localStorage.removeItem('token')
+        // 2.跳转到登录页
+        this.$router.push('/login')
+        this.$message({
+          type: 'success',
+          message: '退出成功!',
+          duration: 800
+        })
+      } catch (error) {
+        console.log('失败')
+        this.$message({
+          type: 'info',
+          message: '取消退出',
+          duration: 800
+        })
+      }
+      // 阻止a的默认跳转  prevent时间修饰符 点击出现弹框确认是否退出
+      // .then(() => {
+      // console.log('成功')
+
+      // })
+      // .catch(() => {
+      // console.log('失败')
+
+      // })
+    },
+    logout1 () {
       // 阻止a的默认跳转  prevent时间修饰符 点击出现弹框确认是否退出
       this.$confirm('此操作将退出登录, 是否继续?', '提示', {
         confirmButtonText: '确定',
@@ -70,6 +105,10 @@ export default {
         type: 'warning'
       })
         .then(() => {
+          // 1. 删除token
+          localStorage.removeItem('token')
+          // 2. 跳转到login
+          this.$router.push('/login')
           this.$message({
             type: 'success',
             message: '退出成功!',
