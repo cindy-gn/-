@@ -5,6 +5,7 @@ import App from './App'
 
 // 导入路由
 import router from './router/router.js'
+import './assets/commont/commont.css'
 
 // 引入element 插件
 import ElementUI from 'element-ui'

@@ -52,6 +52,8 @@ export default {
           .post("http://localhost:8888/api/private/v1/login", this.ruleForm)
           .then(res => {
             console.log(res);
+            // 登录的时候把token存储到本地
+            localStorage.setItem('token',res.data.data.token)
             if (res.data.meta.status === 200) {
               // 1.提示登录成功
               this.$message({
@@ -62,7 +64,7 @@ export default {
               // 跳转到 home页面
               this.$router.push("/home");
             } else {
-              this.$message({
+              this.$message({   
                 message: res.data.meta.msg,
                 type: "error",
                 duration: 800
@@ -79,19 +81,13 @@ export default {
 };
 </script>
 
-<style>
-* {
-  margin: 0;
-  padding: 0;
-}
-html,body,#app{
-  height: 100%;
-}
+<style scoped lang='less'>
+
 .row1{
   height: 100%;
   background: #2d434c;
 }
-.col1{ 
+.col1{
   background: #fff;
   border-radius: 20px;
   padding: 25px 40px;
